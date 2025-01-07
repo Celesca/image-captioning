@@ -6,26 +6,25 @@ from io import BytesIO
 import ollama
 
 os.environ["OPENAI_API_KEY"] = os.getenv("GPT_TOKEN")
-client = OpenAI()
 
-API_KEY = os.getenv("GPT_TOKEN")
+client = OpenAI()
 
 def generate_prompts_from_image(file_name):
     res = ollama.chat(
-	model="llava",
-	messages=[
-		{
-			'role': 'user',
-			'content': 'Describe this image in 200 words or less:',
-			'images': [file_name]
-		}
-	]
+    model="llava",
+    messages=[
+        {
+            'role': 'user',
+            'content': 'Describe this image in 200 words:',
+            'images': [file_name]
+        }
+    ]
     )
 
     return res['message']['content'] 
 
-def generate_images_from_prompts(api_key, prompts, original_name, save_path):
-    
+def generate_images_from_prompts(prompts, original_name, save_path):
+
     print("Generating images from prompts...")
 
     print(f"Generating image... {prompts}")
@@ -53,6 +52,6 @@ for filename in os.listdir(folder_path):
 
         prompts = generate_prompts_from_image(file_path)
 
-        generate_images_from_prompts(API_KEY, prompts, filename, 'output_image')
+        generate_images_from_prompts(prompts, filename, 'output_image')
 
 print("Done!")
